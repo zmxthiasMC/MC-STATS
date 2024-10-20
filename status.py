@@ -102,21 +102,22 @@ def get_additional_info(ip, port):
 
 def print_status_logo():
     logo = f"""
-{Fore.GREEN}  _____ _        _        
-{Fore.GREEN} / ____| |      | |       
-{Fore.GREEN}| (___ | |_ __ _| |_ __ _ 
-{Fore.GREEN} \___ \| __/ _` | __/ _` |
-{Fore.GREEN} ____) | || (_| | || (_| |
-{Fore.GREEN}|_____/ \__\__,_|\__\__,_|
+{Fore.LIGHTGREEN_EX}  
+{Fore.LIGHTGREEN_EX}░██████╗████████╗░█████╗░████████╗██╗░░░██╗░██████╗
+{Fore.LIGHTGREEN_EX}██╔════╝╚══██╔══╝██╔══██╗╚══██╔══╝██║░░░██║██╔════╝
+{Fore.LIGHTGREEN_EX}╚█████╗░░░░██║░░░███████║░░░██║░░░██║░░░██║╚█████╗░
+{Fore.LIGHTGREEN_EX}░╚═══██╗░░░██║░░░██╔══██║░░░██║░░░██║░░░██║░╚═══██╗
+{Fore.LIGHTGREEN_EX}██████╔╝░░░██║░░░██║░░██║░░░██║░░░╚██████╔╝██████╔╝
+{Fore.LIGHTGREEN_EX}╚═════╝░░░░╚═╝░░░╚═╝░░╚═╝░░░╚═╝░░░░╚═════╝░╚═════╝░
     """
     print(logo)
 
 def main():
     print_status_logo()
     
-    ip = input("Introduce la IP del servidor: ")
-    port = input("Introduce el puerto del servidor: ")
-    edition = input("¿Es Java o Bedrock?: ")
+    ip = input("IP Del Servidor: ")
+    port = input("Puerto Del Servidor: ")
+    edition = input("¿Java o Bedrock?: ")
     
     server_info = get_server_info(ip, port, edition)
     additional_info = get_additional_info(ip, port)
@@ -129,8 +130,8 @@ def main():
         for key, value in server_info.items():
             if isinstance(value, bytes):
                 server_info[key] = value.decode('utf-8')
-        print(Fore.YELLOW + json.dumps(server_info, indent=4))
+        print(Fore.LIGHTGREEN_EX + json.dumps(server_info, indent=4))
 
 if __name__ == "__main__":
     main()
-            
+        
