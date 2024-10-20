@@ -5,7 +5,7 @@ from colorama import init, Fore, Style
 
 init(autoreset=True)
 
-def get_server_info(ip, port, version, edition):
+def get_server_info(ip, port, edition):
     if edition.lower() == "java":
         return get_java_server_info(ip, port)
     elif edition.lower() == "bedrock":
@@ -23,7 +23,7 @@ def get_java_server_info(ip, port):
         sock.close()
         
         if data:
-            data = data.decode('utf-16be').split('\x00\x00\x00')
+            data = data.split(b'\x00\x00\x00')
             motd = data[1]
             players = data[4]
             max_players = data[5]
@@ -33,7 +33,6 @@ def get_java_server_info(ip, port):
                 "MOTD": motd,
                 "Players": players,
                 "Max Players": max_players,
-                "Version": version,
                 "Edition": "Java"
             }
         else:
@@ -51,7 +50,7 @@ def get_bedrock_server_info(ip, port):
         sock.close()
         
         if data:
-            data = data.decode('utf-8').split(';')
+            data = data.split(b';')
             motd = data[1]
             players = data[4]
             max_players = data[5]
@@ -61,7 +60,6 @@ def get_bedrock_server_info(ip, port):
                 "MOTD": motd,
                 "Players": players,
                 "Max Players": max_players,
-                "Version": version,
                 "Edition": "Bedrock"
             }
         else:
@@ -118,10 +116,9 @@ def main():
     
     ip = input("Introduce la IP del servidor: ")
     port = input("Introduce el puerto del servidor: ")
-    version = input("Introduce la versión del servidor: ")
     edition = input("¿Es Java o Bedrock?: ")
     
-    server_info = get_server_info(ip, port, version, edition)
+    server_info = get_server_info(ip, port, edition)
     additional_info = get_additional_info(ip, port)
     
     if "error" in server_info:
