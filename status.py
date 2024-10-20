@@ -24,9 +24,9 @@ def get_java_server_info(ip, port):
         
         if data:
             data = data.split(b'\x00\x00\x00')
-            motd = data[1]
-            players = data[4]
-            max_players = data[5]
+            motd = data[1].decode('utf-16be')
+            players = data[4].decode('utf-16be')
+            max_players = data[5].decode('utf-16be')
             return {
                 "IP": ip,
                 "Port": port,
@@ -51,9 +51,9 @@ def get_bedrock_server_info(ip, port):
         
         if data:
             data = data.split(b';')
-            motd = data[1]
-            players = data[4]
-            max_players = data[5]
+            motd = data[1].decode('utf-8')
+            players = data[4].decode('utf-8')
+            max_players = data[5].decode('utf-8')
             return {
                 "IP": ip,
                 "Port": port,
@@ -125,6 +125,10 @@ def main():
         print(Fore.RED + server_info["error"])
     else:
         server_info.update(additional_info)
+        # Asegúrate de que todos los valores sean cadenas antes de serializar a JSON
+        for key, value in server_info.items():
+            if isinstance(value, bytes):
+                server_info[key] = value.decode('utf-8')
         print(Fore.YELLOW + json.dumps(server_info, indent=4))
 
 if __name__ == "__main__":
