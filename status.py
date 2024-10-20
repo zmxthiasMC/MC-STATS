@@ -11,7 +11,7 @@ def get_server_info(ip, port, version, edition):
     elif edition.lower() == "bedrock":
         return get_bedrock_server_info(ip, port)
     else:
-        return "Edición no soportada. Usa 'Java' o 'Bedrock'."
+        return {"error": "Edición no soportada. Usa 'Java' o 'Bedrock'."}
 
 def get_java_server_info(ip, port):
     try:
@@ -37,9 +37,9 @@ def get_java_server_info(ip, port):
                 "Edition": "Java"
             }
         else:
-            return "No se pudo obtener información del servidor."
+            return {"error": "No se pudo obtener información del servidor."}
     except Exception as e:
-        return str(e)
+        return {"error": str(e)}
 
 def get_bedrock_server_info(ip, port):
     try:
@@ -65,9 +65,9 @@ def get_bedrock_server_info(ip, port):
                 "Edition": "Bedrock"
             }
         else:
-            return "No se pudo obtener información del servidor."
+            return {"error": "No se pudo obtener información del servidor."}
     except Exception as e:
-        return str(e)
+        return {"error": str(e)}
 
 def get_additional_info(ip, port):
     try:
@@ -98,19 +98,18 @@ def get_additional_info(ip, port):
                 "Operators": data.get("operators", [])
             }
         else:
-            return "No se pudo obtener información adicional del servidor."
+            return {"error": "No se pudo obtener información adicional del servidor."}
     except Exception as e:
-        return str(e)
+        return {"error": str(e)}
 
 def print_status_logo():
     logo = f"""
-{Fore.GREEN}  
-{Fore.GREEN}░██████╗████████╗░█████╗░████████╗██╗░░░██╗░██████╗
-{Fore.GREEN}██╔════╝╚══██╔══╝██╔══██╗╚══██╔══╝██║░░░██║██╔════╝
-{Fore.GREEN}╚█████╗░░░░██║░░░███████║░░░██║░░░██║░░░██║╚█████╗░
-{Fore.GREEN}░╚═══██╗░░░██║░░░██╔══██║░░░██║░░░██║░░░██║░╚═══██╗
-{Fore.GREEN}██████╔╝░░░██║░░░██║░░██║░░░██║░░░╚██████╔╝██████╔╝
-{Fore.GREEN}╚═════╝░░░░╚═╝░░░╚═╝░░╚═╝░░░╚═╝░░░░╚═════╝░╚═════╝░
+{Fore.GREEN}  _____ _        _        
+{Fore.GREEN} / ____| |      | |       
+{Fore.GREEN}| (___ | |_ __ _| |_ __ _ 
+{Fore.GREEN} \___ \| __/ _` | __/ _` |
+{Fore.GREEN} ____) | || (_| | || (_| |
+{Fore.GREEN}|_____/ \__\__,_|\__\__,_|
     """
     print(logo)
 
@@ -125,9 +124,12 @@ def main():
     server_info = get_server_info(ip, port, version, edition)
     additional_info = get_additional_info(ip, port)
     
-    server_info.update(additional_info)
-    print(Fore.YELLOW + json.dumps(server_info, indent=4))
+    if "error" in server_info:
+        print(Fore.RED + server_info["error"])
+    else:
+        server_info.update(additional_info)
+        print(Fore.YELLOW + json.dumps(server_info, indent=4))
 
 if __name__ == "__main__":
     main()
-      
+            
